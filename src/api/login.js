@@ -1,21 +1,16 @@
 import request from '@/utils/request'
 
-export function login(username, password) {
-  return request({
-    url: '/user/login',
-    method: 'post',
-    data: {
-      username,
-      password
-    }
+export function login(params, headers) {
+  return request.post(`m/login`, params, {
+    headers: headers
   })
 }
 
 export function getInfo(token) {
-  return request({
-    url: '/user/info',
-    method: 'get',
-    params: { token }
+  return request.get(`m/admin/permission`, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
   })
 }
 

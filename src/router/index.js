@@ -30,12 +30,52 @@ export const constantRouterMap = [
     path: '/',
     component: Layout,
     redirect: '/dashboard',
-    name: 'Dashboard',
-    hidden: true,
+    meta: { title: '首页', icon: 'home' },
+    hidden: false,
     children: [{
       path: 'dashboard',
       component: () => import('@/views/dashboard/index')
     }]
+  },
+
+  {
+    path: '/channel',
+    component: Layout,
+    redirect: '/channel/channelView',
+    name: 'Channel',
+    meta: { title: '渠道管理', icon: 'example' },
+    children: [
+      {
+        path: 'channelView',
+        name: 'ChannelView',
+        component: () => import('@/views/channel/channelView/index'),
+        meta: { title: '渠道视图', icon: 'view' }
+      },
+      {
+        path: 'channelAdd',
+        name: 'ChannelAdd',
+        component: () => import('@/views/channel/channelAdd/index'),
+        meta: { title: '添加渠道', icon: 'add' }
+      },
+      {
+        path: 'addBackend',
+        name: 'AddBackend',
+        component: () => import('@/views/channel/addBackend/index'),
+        meta: { title: '添加后台', icon: 'Add1' }
+      },
+      {
+        path: 'disableBackend',
+        name: 'DisableBackend',
+        component: () => import('@/views/channel/disableBackend/index'),
+        meta: { title: '禁用后台', icon: 'disable' }
+      },
+      {
+        path: 'disableList',
+        name: 'DisableList',
+        component: () => import('@/views/channel/disableList/index'),
+        meta: { title: '禁用列表', icon: 'disable' }
+      }
+    ]
   },
 
   {
@@ -131,16 +171,16 @@ export const constantRouterMap = [
     ]
   },
 
-  {
-    path: 'external-link',
-    component: Layout,
-    children: [
-      {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
-      }
-    ]
-  },
+  // {
+  //   path: 'external-link',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
+  //       meta: { title: 'External Link', icon: 'link' }
+  //     }
+  //   ]
+  // },
 
   { path: '*', redirect: '/404', hidden: true }
 ]
