@@ -3,12 +3,20 @@ import {getToken} from '@/utils/auth'
 
 // 添加渠道
 
-const addChannel = (params) => {
-  return request.post(`m/channel`, params)
+
+export function addChannelInfo(params) {
+
+  return request({
+    url: 'm/channel',
+    method: 'post',
+    data:params,
+    headers: {
+      'Authorization': 'Bearer ' + getToken()
+    }
+  })
 }
 
 // 获取渠道列表
-
 
 export function getChannelList(params) {
 
@@ -31,22 +39,38 @@ export function getChannelList(params) {
 
 // 修改渠道信息
 
-const changeChannelInfo = (params, headers) => {
-  return request.put(`m/channel`, params, {
-    headers: headers
+export function changeChannelInfo(params) {
+
+  return request({
+    url: 'm/channel',
+    method: 'put',
+    data:params,
+    headers: {
+      'Authorization': 'Bearer ' + getToken()
+    }
   })
 }
 
-// 删除渠道
+//
+// const changeChannelInfo = (params, headers) => {
+//   return request.put(`m/channel`, params, {
+//     headers: {
+//       'Authorization': 'Bearer ' + getToken()
+//     },
+//   })
+// }
+//
+// // 删除渠道
+//
+// const removeChannel = (params, headers) => {
+//   return request.delete(`m/channel`, params, {
+//     headers: headers
+//   })
+// }
 
-const removeChannel = (params, headers) => {
-  return request.delete(`m/channel`, params, {
-    headers: headers
-  })
-}
-
-export default {
-  addChannel,
-  changeChannelInfo,
-  removeChannel
-}
+//
+// export default {
+//   addChannel,
+//   changeChannelInfo,
+//   removeChannel
+// }
