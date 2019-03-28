@@ -9,7 +9,7 @@ export function addChannelInfo(params) {
   return request({
     url: 'm/channel',
     method: 'post',
-    data:params,
+    data: params,
     headers: {
       'Authorization': 'Bearer ' + getToken()
     }
@@ -44,7 +44,7 @@ export function changeChannelInfo(params) {
   return request({
     url: 'm/channel',
     method: 'put',
-    data:params,
+    data: params,
     headers: {
       'Authorization': 'Bearer ' + getToken()
     }

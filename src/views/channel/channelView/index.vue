@@ -1,87 +1,97 @@
 <template>
   <div class="app-container">
-    <el-button type="primary" @click="showAddChannel = true">添加渠道</el-button>
-
-    <el-table
-      v-loading="listLoading"
-      :data="list"
-      element-loading-text="Loading"
-      border
-      fit
-      highlight-current-row>
-      <el-table-column align="center" label="渠道ID" >
-        <template slot-scope="scope">
-          {{ scope.row.id }}
-        </template>
-      </el-table-column>
-      <el-table-column label="渠道名称" width="250" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.user_name }}
-        </template>
-      </el-table-column>
-      <el-table-column label="合作价格">
-        <template slot-scope="scope">
-          {{ scope.row.price }}
-        </template>
-      </el-table-column>
-      <el-table-column label="今日UV数">
-        <template slot-scope="scope">
-          {{ scope.row.today_uv }}
-        </template>
-      </el-table-column>
-      <el-table-column label="总UV数">
-        <template slot-scope="scope">
-          {{ scope.row.all_uv }}
-        </template>
-      </el-table-column>
-      <el-table-column label="昨天UV数">
-        <template slot-scope="scope">
-          {{ scope.row.data[0].uv}}
-        </template>
-      </el-table-column>
-      <el-table-column label="前天UV数">
-        <template slot-scope="scope">
-          {{ scope.row.data[1].uv}}
-        </template>
-      </el-table-column>
-      <el-table-column label="大前天UV数">
-        <template slot-scope="scope">
-          {{ scope.row.data[2].uv}}
-        </template>
-      </el-table-column>
-
-
-
-      <el-table-column label="今日收入">
-        <template slot-scope="scope">
-          {{ scope.row.today_amount }}
-        </template>
-      </el-table-column>
-      <el-table-column label="总收入">
-        <template slot-scope="scope">
-          {{ scope.row.all_amount }}
-        </template>
-      </el-table-column>
-      <el-table-column width="200" label="操作">
-        <template slot-scope="scope" >
-          <el-button-group>
-            <el-button
-              size="mini"
-              @click="handleEdit(scope.$index, scope.row)">修改</el-button>
-            <el-button
-              size="mini"
-              type="primary"
-              @click="handleDelete(scope.$index, scope.row)">复制渠道链接</el-button>
-          </el-button-group>
-        </template>
-      </el-table-column>
-    </el-table>
+    <el-button type="primary" style="margin-bottom: 10px;" @click="showAddChannel = true">添加渠道</el-button>
+    <div class="app-content">
+      <el-table
+        v-loading="listLoading"
+        :data="list"
+        element-loading-text="Loading"
+        stripe
+        border
+        fit
+        highlight-current-row>
+        <el-table-column align="center" label="渠道ID" >
+          <template slot-scope="scope">
+            {{ scope.row.id }}
+          </template>
+        </el-table-column>
+        <el-table-column show-overflow-tooltip label="渠道名称" align="center">
+          <template slot-scope="scope">
+            {{ scope.row.user_name }}
+          </template>
+        </el-table-column>
+        <el-table-column label="合作价格">
+          <template slot-scope="scope">
+            {{ scope.row.price }}
+          </template>
+        </el-table-column>
+        <el-table-column label="今日UV数">
+          <template slot-scope="scope">
+            {{ scope.row.today_uv }}
+          </template>
+        </el-table-column>
+        <el-table-column label="总UV数">
+          <template slot-scope="scope">
+            {{ scope.row.all_uv }}
+          </template>
+        </el-table-column>
+        <el-table-column label="昨天UV数">
+          <template slot-scope="scope">
+            {{ scope.row.data[0].uv }}
+          </template>
+        </el-table-column>
+        <el-table-column label="前天UV数">
+          <template slot-scope="scope">
+            {{ scope.row.data[1].uv }}
+          </template>
+        </el-table-column>
+        <el-table-column label="大前天UV数">
+          <template slot-scope="scope">
+            {{ scope.row.data[2].uv }}
+          </template>
+        </el-table-column>
 
 
 
+        <el-table-column label="今日收入">
+          <template slot-scope="scope">
+            {{ scope.row.today_amount }}
+          </template>
+        </el-table-column>
+        <el-table-column label="总收入">
+          <template slot-scope="scope">
+            {{ scope.row.all_amount }}
+          </template>
+        </el-table-column>
+        <el-table-column width="200" label="操作">
+          <template slot-scope="scope" >
+            <el-button-group>
+              <el-button
+                size="mini"
+                @click="handleEdit(scope.$index, scope.row)">修改</el-button>
+              <el-button
+                :data-clipboard-text="`http://d.bepei.com/index.html?channel_id=${scope.row.id}`"
+                size="mini"
+                type="primary"
+                class="tag-read"
+                @click="copy">复制渠道链接</el-button>
+            </el-button-group>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div class="page-wrap">
+        <el-pagination
+          :total="total"
+          :current-page.sync="postData.page"
+          background
+          layout="prev, pager, next, jumper"
+          @current-change="changePage">
+        </el-pagination>
+      </div>
+    </div>
     <el-dialog
-      title="修改渠道信息"
       :visible.sync="showEditChannel"
+      title="修改渠道信息"
       width="30%">
       <div>
         <el-form ref="form" label-width="80px">
@@ -99,12 +109,9 @@
         <el-button type="primary" @click="submitEdit">确 定</el-button>
       </span>
     </el-dialog>
-
-
-
     <el-dialog
-      title="添加渠道"
       :visible.sync="showAddChannel"
+      title="添加渠道"
       width="30%">
       <div>
         <el-form ref="form" label-width="200px">
@@ -132,11 +139,8 @@
   </div>
 </template>
 <script type="text/javascript">
-<<<<<<< HEAD
-import { getChannelList } from '@/api/channel'
-=======
-import {getChannelList,changeChannelInfo,addChannelInfo} from '@/api/channel';
->>>>>>> b6cee0cf2af786561b5ac14f76a79e6aa009ff29
+import { getChannelList, changeChannelInfo, addChannelInfo } from '@/api/channel'
+import Clipboard from 'clipboard'
 
 export default {
   name: 'ChannelView',
@@ -146,8 +150,7 @@ export default {
         published: 'success',
         draft: 'gray',
         deleted: 'danger',
-        da:'riqi'
-
+        da: 'riqi'
       }
       return statusMap[status]
     }
@@ -157,19 +160,22 @@ export default {
       list: null,
       listLoading: true,
       showEditChannel: false,
-      showAddChannel:false,
-      editChannel:{
-        user_name:"",
-        price:"",
-        id:0
+      showAddChannel: false,
+      total: 0,
+      postData: {
+        page: 1
       },
-      addChannel:{
-        user_name:"",
-        price:"",
-        account:"",
-        password:""
+      editChannel: {
+        user_name: '',
+        price: '',
+        id: 0
+      },
+      addChannel: {
+        user_name: '',
+        price: '',
+        account: '',
+        password: ''
       }
-
     }
   },
   created() {
@@ -178,13 +184,36 @@ export default {
   methods: {
     fetchData() {
       this.listLoading = true
-      getChannelList({}).then(response => {
+      getChannelList(this.postData).then(response => {
         this.list = response.data
-        console.log(this.list)
+        this.total = response.meta.pagination.total
         this.listLoading = false
       })
     },
-    handleEdit(idx,row){
+    changePage(page) {
+      this.postData.page = page
+      this.fetchData()
+    },
+    copy() {
+      const clipboard = new Clipboard('.tag-read')
+      clipboard.on( 'success', e =>{
+        this.$notify({
+          title: '成功',
+          message: '复制成功！',
+          type: 'success'
+        })
+        clipboard.destroy()
+      })
+      clipboard.on( 'error', err => {
+        this.$notify({
+          title: '失败',
+          message: '该浏览器不支持自动复制！',
+          type: 'error'
+        })
+        clipboard.destroy()
+      })
+    },
+    handleEdit(idx, row) {
 
       this.editChannel.user_name = row.user_name
       this.editChannel.price = row.price
@@ -192,17 +221,13 @@ export default {
       this.showEditChannel = true
 
     },
-    submitEdit()
-    {
+    submitEdit() {
       console.log(this.editChannel)
       changeChannelInfo(this.editChannel).then(response => {
-        if(response.id != undefined)
-        {
+        if (response.id != undefined) {
           this.showEditChannel = false
-          for(var p in this.list)
-          {
-            if(this.list[p].id == this.editChannel.id)
-            {
+          for (var p in this.list) {
+            if (this.list[p].id == this.editChannel.id) {
               this.list[p].price = this.editChannel.price
               this.list[p].user_name = this.editChannel.user_name
             }
@@ -214,22 +239,19 @@ export default {
             title: '成功',
             message: '修改成功',
             type: 'success'
-          });
-        }else
-        {
+          })
+        } else {
           this.$notify.error({
             title: '错误',
             message: '修改失败'
-          });
+          })
         }
       })
     },
-    submitAdd()
-    {
+    submitAdd() {
       console.log(this.addChannel)
       addChannelInfo(this.addChannel).then(response => {
-        if(response.id != undefined)
-        {
+        if (response.id != undefined) {
           this.showAddChannel = false
           this.addChannel.price = ''
           this.addChannel.id = null
@@ -239,10 +261,9 @@ export default {
             title: '成功',
             message: '添加成功',
             type: 'success'
-          });
-          this.fetchData();
-        }else
-        {
+          })
+          this.fetchData()
+        } else {
           this.$notify.error({
             title: '错误',
             message: '添加失败'
@@ -255,5 +276,20 @@ export default {
 </script>
 
 <style scoped>
-
+  .app-content {
+    position: relative;
+    padding: 0 10px 60px 10px;
+  }
+  .page-wrap {
+    height: 60px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0 10px;
+  }
 </style>
