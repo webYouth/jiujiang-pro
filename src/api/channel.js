@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import {getToken} from '@/utils/auth'
+import { getToken } from '@/utils/auth'
 
 // 添加渠道
 

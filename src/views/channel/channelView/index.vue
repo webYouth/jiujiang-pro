@@ -77,7 +77,7 @@
   </div>
 </template>
 <script type="text/javascript">
-import {getChannelList} from '@/api/channel';
+import { getChannelList } from '@/api/channel'
 
 export default {
   name: 'ChannelView',
