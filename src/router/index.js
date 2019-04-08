@@ -50,31 +50,32 @@ export const constantRouterMap = [
         name: 'ChannelView',
         component: () => import('@/views/channel/channelView/index'),
         meta: { title: '渠道视图', icon: 'view' }
-      },
-      // {
-      //   path: 'channelAdd',
-      //   name: 'ChannelAdd',
-      //   component: () => import('@/views/channel/channelAdd/index'),
-      //   meta: { title: '添加渠道', icon: 'add' }
-      // },
-      {
-        path: 'addBackend',
-        name: 'AddBackend',
-        component: () => import('@/views/channel/addBackend/index'),
-        meta: { title: '添加后台', icon: 'Add1' }
-      },
-      {
-        path: 'disableBackend',
-        name: 'DisableBackend',
-        component: () => import('@/views/channel/disableBackend/index'),
-        meta: { title: '禁用后台', icon: 'disable' }
-      },
-      {
-        path: 'disableList',
-        name: 'DisableList',
-        component: () => import('@/views/channel/disableList/index'),
-        meta: { title: '禁用列表', icon: 'disable' }
       }
+      //,
+      // {
+      //   path: 'staffView',
+      //   name: 'staffView',
+      //   component: () => import('@/views/channel/staffView/index'),
+      //   meta: { title: '员工列表', icon: 'user' }
+      // },
+      // {
+      //   path: 'staffView',
+      //   name: 'AddBackend',
+      //   component: () => import('@/views/channel/staffView/index'),
+      //   meta: { title: '添加后台', icon: 'Add1' }
+      // },
+      // {
+      //   path: 'disableBackend',
+      //   name: 'DisableBackend',
+      //   component: () => import('@/views/channel/disableBackend/index'),
+      //   meta: { title: '禁用后台', icon: 'disable' }
+      // },
+      // {
+      //   path: 'disableList',
+      //   name: 'DisableList',
+      //   component: () => import('@/views/channel/disableList/index'),
+      //   meta: { title: '禁用列表', icon: 'disable' }
+      // }
     ]
   },
 
@@ -90,6 +91,21 @@ export const constantRouterMap = [
         name: 'realData',
         component: () => import('@/views/realdata/index'),
         meta: { title: '实时数据', icon: 'table' }
+      }
+    ]
+  },
+  {
+    path: '/staffView',
+    component: Layout,
+    redirect: '/staffView',
+    name: 'staffView',
+    meta: { title: '员工管理', icon: 'user' },
+    children: [
+      {
+        path: 'staffData',
+        name: 'staffData',
+        component: () => import('@/views/channel/staffView/index'),
+        meta: { title: '员工列表', icon: 'user' }
       }
     ]
   },

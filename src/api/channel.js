@@ -39,11 +39,11 @@ export function getChannelList(params) {
 
 // 修改渠道信息
 
-export function changeChannelInfo(params) {
+export function changeChannelInfo(id,params) {
 
   return request({
-    url: 'm/channel',
-    method: 'put',
+    url: 'm/channel/'+id,
+    method: 'post',
     data: params,
     headers: {
       'Authorization': 'Bearer ' + getToken()

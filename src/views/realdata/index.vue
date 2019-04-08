@@ -16,7 +16,8 @@
         <el-table-column
           prop="id"
           show-overflow-tooltip
-          label="用户id">
+          label="id"
+          width="40">
           <template slot-scope="scope">
             <span>{{ scope.row.id || '暂无' }}</span>
           </template>
@@ -24,7 +25,17 @@
         <el-table-column
           prop="name"
           show-overflow-tooltip
-          label="姓名">
+          label="渠道"
+          width="150">
+          <template slot-scope="scope">
+            <span>{{ scope.row.channel || '暂无' }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="name"
+          show-overflow-tooltip
+          label="姓名"
+          width="100">
           <template slot-scope="scope">
             <span>{{ scope.row.name || '暂无' }}</span>
           </template>
@@ -32,7 +43,8 @@
         <el-table-column
           prop="mobile"
           show-overflow-tooltip
-          label="手机号">
+          label="手机号"
+          width="150">
           <template slot-scope="scope">
             <span>{{ scope.row.mobile || '暂无' }}</span>
           </template>
@@ -48,7 +60,8 @@
         <el-table-column
           prop="education"
           show-overflow-tooltip
-          label="学历">
+          label="学历"
+          width="50">
           <template slot-scope="scope">
             <span>{{ scope.row.education || '暂无' }}</span>
           </template>
@@ -56,7 +69,8 @@
         <el-table-column
           prop="alipay_score"
           show-overflow-tooltip
-          label="芝麻信用分">
+          label="芝麻信用分"
+          width="100">
           <template slot-scope="scope">
             <span>{{ scope.row.alipay_score || '暂无' }}</span>
           </template>
@@ -64,60 +78,36 @@
         <el-table-column
           prop="province"
           show-overflow-tooltip
-          label="省">
+          label="城市">
           <template slot-scope="scope">
-            <span>{{ scope.row.province || '暂无' }}</span>
+            <span>{{ scope.row.province  }}{{ scope.row.city  }}{{ scope.row.area  }}</span>
           </template>
         </el-table-column>
+        <!--<el-table-column-->
+          <!--prop="address"-->
+          <!--show-overflow-tooltip-->
+          <!--label="地址">-->
+          <!--<template slot-scope="scope">-->
+            <!--<span>{{ scope.row.address || '暂无' }}</span>-->
+          <!--</template>-->
+        <!--</el-table-column>-->
+
+        <!--<el-table-column-->
+          <!--prop="alipay_verify"-->
+          <!--show-overflow-tooltip-->
+          <!--label="是否认证"-->
+          <!--width="180">-->
+          <!--<template slot-scope="scope">-->
+            <!--<el-tag v-if="scope.row.pay_time" type="success">已认证</el-tag>-->
+            <!--<el-tag v-else type="danger">未认证</el-tag>-->
+          <!--</template>-->
+        <!--</el-table-column>-->
         <el-table-column
-          prop="city"
+          prop="created_at"
           show-overflow-tooltip
-          label="市">
+          label="注册时间">
           <template slot-scope="scope">
-            <span>{{ scope.row.city || '暂无' }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="area"
-          show-overflow-tooltip
-          label="区">
-          <template slot-scope="scope">
-            <span>{{ scope.row.area || '暂无' }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="address"
-          show-overflow-tooltip
-          label="地址">
-          <template slot-scope="scope">
-            <span>{{ scope.row.address || '暂无' }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="person_verify"
-          show-overflow-tooltip
-          label="身份认证">
-          <template slot-scope="scope">
-            <el-tag v-if="scope.row.person_verify" type="success">已认证</el-tag>
-            <el-tag v-else type="danger">未认证</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="education_verify"
-          show-overflow-tooltip
-          label="学历认证">
-          <template slot-scope="scope">
-            <el-tag v-if="scope.row.education_verify" type="success">已认证</el-tag>
-            <el-tag v-else type="danger">未认证</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="alipay_verify"
-          show-overflow-tooltip
-          label="芝麻信用认证">
-          <template slot-scope="scope">
-            <el-tag v-if="scope.row.alipay_verify" type="success">已认证</el-tag>
-            <el-tag v-else type="danger">未认证</el-tag>
+            <span>{{ scope.row.created_at }}</span>
           </template>
         </el-table-column>
       </el-table>
