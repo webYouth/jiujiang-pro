@@ -4,7 +4,7 @@
     <!--<div class="dashboard-text">name:{{ name }}</div>-->
     <!--<div class="dashboard-text">roles:<span v-for="role in roles" :key="role">{{ role }}</span></div>-->
     <div class="dashboard-welcome">
-      <h3>欢迎来到「宇宙第一骚货———余强强」的集成后台，你将领略到vue的强大魅力！</h3>
+      <h3>欢迎来到后台</h3>
     </div>
   </div>
 </template>
