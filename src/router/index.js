@@ -43,7 +43,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/channel/channelView',
     name: 'Channel',
-    meta: { title: '渠道管理', icon: 'example' },
+    meta: { title: '渠道管理', icon: 'home' },
     children: [
       {
         path: 'channelView',

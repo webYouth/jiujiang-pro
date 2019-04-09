@@ -31,6 +31,8 @@ const user = {
       return new Promise((resolve, reject) => {
         login(userInfo).then(response => {
           console.log(response)
+          localStorage.setItem('token',response.token);
+          localStorage.setItem('role',response.role[0]);
           const data = response
           setToken(data.token)
           commit('SET_TOKEN', data.token)

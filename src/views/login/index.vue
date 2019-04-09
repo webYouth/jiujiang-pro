@@ -58,7 +58,7 @@ export default {
     }
     return {
       loginForm: {
-        account: 'nanchang',
+        account: 'shenyong',
         password: '123456'
       },
       loginRules: {
@@ -90,10 +90,14 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('Login', this.loginForm).then(() => {
+          this.$store.dispatch('Login', this.loginForm).then((response) => {
             this.loading = false
+            //console.log(response);
+
+            //localStorage.setItem('token',response);
+            //localStorage.setItem('role',response.role[0]);
             console.log(this.redirect)
-            this.$router.push({ path: this.redirect || '/' })
+            this.$router.push({ path: this.redirect || '/channel/channelView' })
           }).catch(() => {
             this.loading = false
           })

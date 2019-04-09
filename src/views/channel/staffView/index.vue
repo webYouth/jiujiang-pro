@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="app-content">
-      <div style="padding-bottom:5px;overflow:hidden;">
+      <div style="padding-bottom:5px;overflow:hidden;" v-if="isSuper">
         <div style="float:left;">
           <el-button type="primary" style="margin-bottom: 10px;" @click="showAddStaff = true">添加员工</el-button>
         </div>
@@ -137,6 +137,7 @@
     },
     data() {
       return {
+        isSuper:false,
         dateTitle: [],
         list: null,
         listLoading: true,
@@ -160,6 +161,10 @@
       }
     },
     created() {
+      if(localStorage.getItem('role') == 'super')
+      {
+        this.isSuper = true;
+      }
       this.fetchData()
     },
     methods: {

@@ -1,11 +1,11 @@
 <template>
   <div class="app-container">
     <div class="app-content">
-      <div style="padding-bottom:5px;overflow:hidden;">
+      <div style="padding-bottom:5px;overflow:hidden;" v-if="isSuper">
         <div style="float:left;">
           <el-button type="primary" style="margin-bottom: 10px;" @click="showAddChannel = true">添加渠道</el-button>
         </div>
-        <div style="float:right;color:gray;font-size:0.9rem;">
+        <div style="float:right;color:gray;font-size:0.9rem;" >
           <!--<i class="el-icon-question" style="color:#F56C6C;"></i>-->
           1.「今日注册」指今日实际注册人数<br/>
           2.「今日结算」指今日需要为渠道结算的用户量<br/>
@@ -31,6 +31,11 @@
             {{ scope.row.user_name }}
           </template>
         </el-table-column>
+        <el-table-column show-overflow-tooltip label="渠道登录账号" align="center">
+          <template slot-scope="scope">
+            {{ scope.row.account }}
+          </template>
+        </el-table-column>
         <el-table-column label="合作价格" width="80">
           <template slot-scope="scope">
             {{ scope.row.price }}
@@ -47,7 +52,7 @@
             {{ scope.row.today_pay }}
           </template>
         </el-table-column>
-        <el-table-column label="今日实际结算" width="110">
+        <el-table-column label="今日实际结算" width="110" v-if="isSuper">
           <template slot-scope="scope">
             {{ scope.row.today_real_pay }}
           </template>
@@ -92,7 +97,7 @@
                 @click="handleEdit(scope.$index, scope.row)">修改
               </el-button>
               <el-button
-                :data-clipboard-text="`http://d.bepei.com/index.html?channel_id=${scope.row.id}`"
+                :data-clipboard-text="`https://house.rangni.cn/index.html?channel_id=${scope.row.id}`"
                 size="mini"
                 type="primary"
                 class="tag-read"
@@ -180,6 +185,7 @@
     },
     data() {
       return {
+        isSuper:false,
         dateTitle: [],
         list: null,
         listLoading: true,
@@ -203,6 +209,10 @@
       }
     },
     created() {
+      if(localStorage.getItem('role') == 'super')
+      {
+        this.isSuper = true;
+      }
       var dateObject = new Date()
       //昨天
       dateObject.setDate(dateObject.getDate() - 1)
