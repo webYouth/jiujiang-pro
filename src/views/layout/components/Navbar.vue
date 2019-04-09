@@ -4,7 +4,10 @@
     <breadcrumb />
     <el-dropdown class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
-        <img :src="avatar" class="user-avatar">
+        <span style="line-height:40px;">{{user_name}}</span>
+        <img src="http://tupian.qqw21.com/article/UploadPic/2019-3/201932820124973586.jpg" class="user-avatar" v-if="checkPermission(['staff'])">
+        <img src="http://tupian.qqw21.com/article/UploadPic/2019-3/201932820125128041.jpg" class="user-avatar" v-if="checkPermission(['super'])">
+        <img src="http://tupian.qqw21.com/article/UploadPic/2019-3/201932421504726035.jpeg" class="user-avatar" v-if="checkPermission(['channel'])">
         <i class="el-icon-caret-bottom"/>
       </div>
       <el-dropdown-menu slot="dropdown" class="user-dropdown">
@@ -25,11 +28,17 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
+import {checkPermission} from '../../../utils/auth'
 
 export default {
   components: {
     Breadcrumb,
     Hamburger
+  },
+  data(){
+    return {
+      user_name:''
+    }
   },
   computed: {
     ...mapGetters([
@@ -37,7 +46,11 @@ export default {
       'avatar'
     ])
   },
+  created(){
+    this.user_name = localStorage.getItem('user_name');
+  },
   methods: {
+    checkPermission,
     toggleSideBar() {
       this.$store.dispatch('ToggleSideBar')
     },

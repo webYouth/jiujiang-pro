@@ -1,11 +1,11 @@
 <template>
   <div class="app-container">
     <div class="app-content">
-      <div style="padding-bottom:5px;overflow:hidden;" v-if="isSuper">
+      <div style="padding-bottom:5px;overflow:hidden;" >
         <div style="float:left;">
-          <el-button type="primary" style="margin-bottom: 10px;" @click="showAddChannel = true">添加渠道</el-button>
+          <el-button type="primary" style="margin-bottom: 10px;" @click="showAddChannel = true" v-if="isSuper || isStaff">添加渠道</el-button>
         </div>
-        <div style="float:right;color:gray;font-size:0.9rem;" >
+        <div style="float:right;color:gray;font-size:0.9rem;" v-if="isSuper">
           <!--<i class="el-icon-question" style="color:#F56C6C;"></i>-->
           1.「今日注册」指今日实际注册人数<br/>
           2.「今日结算」指今日需要为渠道结算的用户量<br/>
@@ -47,7 +47,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="今日结算" width="100">
+        <el-table-column label="今日结算" width="100" v-if="isSuper">
           <template slot-scope="scope">
             {{ scope.row.today_pay }}
           </template>
@@ -186,6 +186,7 @@
     data() {
       return {
         isSuper:false,
+        isStaff:false,
         dateTitle: [],
         list: null,
         listLoading: true,
@@ -212,6 +213,9 @@
       if(localStorage.getItem('role') == 'super')
       {
         this.isSuper = true;
+      }else if(localStorage.getItem('role') == 'staff')
+      {
+        this.isStaff = true;
       }
       var dateObject = new Date()
       //昨天

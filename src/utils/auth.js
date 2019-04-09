@@ -13,3 +13,17 @@ export function setToken(token) {
 export function removeToken() {
   return Cookies.remove(TokenKey)
 }
+
+export function checkPermission(permission)
+{
+  let role = localStorage.getItem('role');
+
+  for(var p in permission)
+  {
+    if(role == permission[p])
+    {
+      return true;
+    }
+  }
+  return false;
+}
