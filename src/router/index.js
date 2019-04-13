@@ -109,6 +109,21 @@ export const constantRouterMap = [
       }
     ]
   },
+  {
+    path: '/market',
+    component: Layout,
+    redirect: '/market',
+    name: 'market',
+    meta: { title: '贷款超市', icon: 'international' },
+    children: [
+      {
+        path: 'staffData',
+        name: 'staffData',
+        component: () => import('@/views/channel/market/index'),
+        meta: { title: '贷款超市', icon: 'tree' }
+      }
+    ]
+  },
 
   // {
   //   path: '/example',

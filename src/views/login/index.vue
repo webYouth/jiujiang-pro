@@ -29,8 +29,8 @@
         </el-button>
       </el-form-item>
       <!--<div class="tips">-->
-        <!--<span style="margin-right:20px;">username: admin</span>-->
-        <!--<span> password: admin</span>-->
+      <!--<span style="margin-right:20px;">username: admin</span>-->
+      <!--<span> password: admin</span>-->
       <!--</div>-->
     </el-form>
   </div>
@@ -92,10 +92,10 @@ export default {
           this.loading = true
           this.$store.dispatch('Login', this.loginForm).then((response) => {
             this.loading = false
-            //console.log(response);
+            // console.log(response);
 
-            //localStorage.setItem('token',response);
-            //localStorage.setItem('role',response.role[0]);
+            // localStorage.setItem('token',response);
+            // localStorage.setItem('role',response.role[0]);
             console.log(this.redirect)
             this.$router.push({ path: this.redirect || '/channel/channelView' })
           }).catch(() => {

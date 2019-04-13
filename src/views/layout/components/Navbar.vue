@@ -4,10 +4,10 @@
     <breadcrumb />
     <el-dropdown class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
-        <span style="line-height:40px;">{{user_name}}</span>
-        <img src="http://tupian.qqw21.com/article/UploadPic/2019-3/201932820124973586.jpg" class="user-avatar" v-if="checkPermission(['staff'])">
-        <img src="http://tupian.qqw21.com/article/UploadPic/2019-3/201932820125128041.jpg" class="user-avatar" v-if="checkPermission(['super'])">
-        <img src="http://tupian.qqw21.com/article/UploadPic/2019-3/201932421504726035.jpeg" class="user-avatar" v-if="checkPermission(['channel'])">
+        <span style="line-height:40px;">{{ user_name }}</span>
+        <img v-if="checkPermission(['staff'])" src="https://tvax2.sinaimg.cn/crop.0.0.512.512.180/b6475437ly8g20u4imk4yj20e80e8dgi.jpg" class="user-avatar">
+        <img v-if="checkPermission(['super'])" src="https://tvax4.sinaimg.cn/crop.0.0.1080.1080.180/9bf2cd1ely8g1q6qkvdjxj20u00u0n0d.jpg" class="user-avatar">
+        <img v-if="checkPermission(['channel'])" src="https://tvax4.sinaimg.cn/crop.0.0.1242.1242.180/6842019aly8fon6sygphgj20yi0yiaf0.jpg" class="user-avatar">
         <i class="el-icon-caret-bottom"/>
       </div>
       <el-dropdown-menu slot="dropdown" class="user-dropdown">
@@ -28,16 +28,16 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
-import {checkPermission} from '../../../utils/auth'
+import { checkPermission } from '../../../utils/auth'
 
 export default {
   components: {
     Breadcrumb,
     Hamburger
   },
-  data(){
+  data() {
     return {
-      user_name:''
+      user_name: ''
     }
   },
   computed: {
@@ -46,8 +46,8 @@ export default {
       'avatar'
     ])
   },
-  created(){
-    this.user_name = localStorage.getItem('user_name');
+  created() {
+    this.user_name = localStorage.getItem('user_name')
   },
   methods: {
     checkPermission,

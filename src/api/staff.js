@@ -3,9 +3,7 @@ import { getToken } from '@/utils/auth'
 
 // 添加渠道
 
-
 export function addStaffInfo(params) {
-
   return request({
     url: 'm/staff',
     method: 'post',
@@ -19,7 +17,6 @@ export function addStaffInfo(params) {
 // 获取渠道列表
 
 export function getStaffList(params) {
-
   return request({
     url: 'm/staff',
     method: 'get',
@@ -32,10 +29,9 @@ export function getStaffList(params) {
 
 // 修改员工信息
 
-export function changeStaffInfo(id,params) {
-
+export function changeStaffInfo(id, params) {
   return request({
-    url: 'm/staff/'+id,
+    url: 'm/staff/' + id,
     method: 'post',
     data: params,
     headers: {
@@ -44,10 +40,9 @@ export function changeStaffInfo(id,params) {
   })
 }
 
-export function disenableStaff(id,params) {
-
+export function disenableStaff(id, params) {
   return request({
-    url: 'm/staff/'+id+"/disenable",
+    url: 'm/staff/' + id + '/disenable',
     method: 'post',
     data: params,
     headers: {

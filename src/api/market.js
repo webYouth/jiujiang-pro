@@ -3,9 +3,9 @@ import { getToken } from '@/utils/auth'
 
 // 添加渠道
 
-export function addChannelInfo(params) {
+export function addMarketInfo(params) {
   return request({
-    url: 'm/channel',
+    url: 'm/market',
     method: 'post',
     data: params,
     headers: {
@@ -16,9 +16,9 @@ export function addChannelInfo(params) {
 
 // 获取渠道列表
 
-export function getChannelList(params) {
+export function getMarketList(params) {
   return request({
-    url: 'm/channel',
+    url: 'm/market',
     method: 'get',
     headers: {
       'Authorization': 'Bearer ' + getToken()
@@ -27,7 +27,7 @@ export function getChannelList(params) {
   })
 }
 
-// const getChannelList = (params, headers) => {
+// const getMarketList = (params, headers) => {
 //   return request.get(`m/channel`, {
 //     params: params,
 //     headers: headers
@@ -36,9 +36,9 @@ export function getChannelList(params) {
 
 // 修改渠道信息
 
-export function changeChannelInfo(id, params) {
+export function changeMarketInfo(id, params) {
   return request({
-    url: 'm/channel/' + id,
+    url: 'm/market/' + id,
     method: 'post',
     data: params,
     headers: {
@@ -48,7 +48,7 @@ export function changeChannelInfo(id, params) {
 }
 
 //
-// const changeChannelInfo = (params, headers) => {
+// const changeMarketInfo = (params, headers) => {
 //   return request.put(`m/channel`, params, {
 //     headers: {
 //       'Authorization': 'Bearer ' + getToken()
@@ -58,7 +58,7 @@ export function changeChannelInfo(id, params) {
 //
 // // 删除渠道
 //
-// const removeChannel = (params, headers) => {
+// const removeMarket = (params, headers) => {
 //   return request.delete(`m/channel`, params, {
 //     headers: headers
 //   })
@@ -66,7 +66,7 @@ export function changeChannelInfo(id, params) {
 
 //
 // export default {
-//   addChannel,
-//   changeChannelInfo,
-//   removeChannel
+//   addMarket,
+//   changeMarketInfo,
+//   removeMarket
 // }

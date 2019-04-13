@@ -14,16 +14,13 @@ export function removeToken() {
   return Cookies.remove(TokenKey)
 }
 
-export function checkPermission(permission)
-{
-  let role = localStorage.getItem('role');
+export function checkPermission(permission) {
+  const role = localStorage.getItem('role')
 
-  for(var p in permission)
-  {
-    if(role == permission[p])
-    {
-      return true;
+  for (var p in permission) {
+    if (role == permission[p]) {
+      return true
     }
   }
-  return false;
+  return false
 }
