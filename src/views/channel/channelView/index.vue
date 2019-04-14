@@ -118,14 +118,17 @@
     <el-dialog
       :visible.sync="showEditChannel"
       title="修改渠道信息"
-      width="30%">
+      width="50%">
       <div>
-        <el-form ref="form" label-width="80px">
+        <el-form ref="form" label-width="100px">
           <el-form-item label="渠道名">
             <el-input v-model="editChannel.user_name"/>
           </el-form-item>
           <el-form-item label="渠道价格">
             <el-input v-model="editChannel.price"/>
+          </el-form-item>
+          <el-form-item label="渠道登录密码">
+            <el-input v-model="editChannel.password"/>
           </el-form-item>
         </el-form>
 
@@ -138,9 +141,9 @@
     <el-dialog
       :visible.sync="showAddChannel"
       title="添加渠道"
-      width="30%">
+      width="50%">
       <div>
-        <el-form ref="form" label-width="200px">
+        <el-form ref="form" label-width="100px">
           <el-form-item label="渠道名">
             <el-input v-model="addChannel.user_name"/>
           </el-form-item>
