@@ -29,9 +29,9 @@ export const constantRouterMap = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/channel/channelView',
     meta: { title: '首页', icon: 'home' },
-    hidden: false,
+    hidden: true,
     children: [{
       path: 'dashboard',
       component: () => import('@/views/dashboard/index')
@@ -43,7 +43,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/channel/channelView',
     name: 'Channel',
-    meta: { title: '渠道管理', icon: 'home' },
+    meta: { title: '渠道管理', icon: 'home', role: ['super', 'staff', 'channel'] },
     children: [
       {
         path: 'channelView',
@@ -51,7 +51,7 @@ export const constantRouterMap = [
         component: () => import('@/views/channel/channelView/index'),
         meta: { title: '渠道视图', icon: 'view' }
       }
-      //,
+      // ,
       // {
       //   path: 'staffView',
       //   name: 'staffView',
@@ -84,7 +84,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/realTimeData/realData',
     name: 'RealTimeData',
-    meta: { title: '实时管理', icon: 'example' },
+    meta: { title: '实时管理', icon: 'example', role: ['super', 'staff'] },
     children: [
       {
         path: 'realData',
@@ -99,7 +99,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/staffView',
     name: 'staffView',
-    meta: { title: '员工管理', icon: 'user' },
+    meta: { title: '员工管理', icon: 'user', role: ['super'] },
     children: [
       {
         path: 'staffData',
@@ -114,13 +114,13 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/market',
     name: 'market',
-    meta: { title: '贷款超市', icon: 'international' },
+    meta: { title: '贷款超市', icon: 'international', role: ['super'] },
     children: [
       {
         path: 'staffData',
         name: 'staffData',
         component: () => import('@/views/channel/market/index'),
-        meta: { title: '贷款超市', icon: 'tree' }
+        meta: { title: '贷款超市', icon: 'tree'}
       }
     ]
   },

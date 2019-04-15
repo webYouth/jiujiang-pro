@@ -10,3 +10,13 @@ export function isvalidUsername(str) {
 export function isExternal(path) {
   return /^(https?:|mailto:|tel:)/.test(path)
 }
+
+export function in_array(stringToSearch, arrayToSearch) {
+  for (let s = 0; s < arrayToSearch.length; s++) {
+    const thisEntry = arrayToSearch[s].toString()
+    if (thisEntry === stringToSearch) {
+      return true
+    }
+  }
+  return false
+}

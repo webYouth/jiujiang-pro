@@ -32,13 +32,13 @@
           </template>
         </el-table-column>
         <!--<el-table-column-->
-          <!--prop="name"-->
-          <!--show-overflow-tooltip-->
-          <!--label="姓名"-->
+        <!--prop="name"-->
+        <!--show-overflow-tooltip-->
+        <!--label="姓名"-->
         <!--&gt;-->
-          <!--<template slot-scope="scope">-->
-            <!--<span>{{ scope.row.name || '暂无' }}</span>-->
-          <!--</template>-->
+        <!--<template slot-scope="scope">-->
+        <!--<span>{{ scope.row.name || '暂无' }}</span>-->
+        <!--</template>-->
         <!--</el-table-column>-->
         <el-table-column
           prop="mobile"

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!item.hidden" class="menu-wrapper">
+  <div v-if="!item.hidden && judgeIsInArray(item)" class="menu-wrapper">
 
     <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
       <app-link :to="resolvePath(onlyOneChild.path)">
@@ -53,9 +53,19 @@ export default {
     // To fix https://github.com/PanJiaChen/vue-admin-template/issues/237
     // TODO: refactor with render function
     this.onlyOneChild = null
-    return {}
+    return {
+      role: '',
+      isRole: false
+    }
+  },
+  created() {
+    this.role = localStorage.getItem('role')
   },
   methods: {
+    judgeIsInArray(array) {
+      const index = array.meta.role.findIndex(v => v === this.role)
+      return !(index === -1)
+    },
     hasOneShowingChild(children = [], parent) {
       const showingChildren = children.filter(item => {
         if (item.hidden) {
