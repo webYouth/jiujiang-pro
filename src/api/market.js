@@ -26,16 +26,16 @@ export function getMarketList(params) {
     params
   })
 }
-
-// const getMarketList = (params, headers) => {
-//   return request.get(`m/channel`, {
-//     params: params,
-//     headers: headers
-//   })
-// }
-
-// 修改渠道信息
-
+export function analysis(params) {
+  return request({
+    url: 'm/market/analysis',
+    method: 'get',
+    headers: {
+      'Authorization': 'Bearer ' + getToken()
+    },
+    params
+  })
+}
 export function changeMarketInfo(id, params) {
   return request({
     url: 'm/market/' + id,

@@ -8,6 +8,8 @@
         <img v-if="checkPermission(['staff'])" src="https://tvax2.sinaimg.cn/crop.0.0.512.512.180/b6475437ly8g20u4imk4yj20e80e8dgi.jpg" class="user-avatar">
         <img v-if="checkPermission(['super'])" src="https://tvax4.sinaimg.cn/crop.0.0.1080.1080.180/9bf2cd1ely8g1q6qkvdjxj20u00u0n0d.jpg" class="user-avatar">
         <img v-if="checkPermission(['channel'])" src="https://tvax4.sinaimg.cn/crop.0.0.1242.1242.180/6842019aly8fon6sygphgj20yi0yiaf0.jpg" class="user-avatar">
+        <img v-if="checkPermission(['marketStaff'])" src="https://tvax4.sinaimg.cn/crop.0.0.1242.1242.180/6842019aly8fon6sygphgj20yi0yiaf0.jpg" class="user-avatar">
+
         <i class="el-icon-caret-bottom"/>
       </div>
       <el-dropdown-menu slot="dropdown" class="user-dropdown">
