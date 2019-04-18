@@ -4,11 +4,11 @@
       <div style="padding-bottom:5px;overflow:hidden;">
 
         <div style="float:right">
-          <el-form ref="form" :inline="true" class="demo-form-inline" :model="postData">
+          <el-form ref="form" :inline="true" :model="postData" class="demo-form-inline">
 
             <el-form-item label="产品名称">
               <el-input v-model="postData.keyword">
-                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+                <el-button slot="append" icon="el-icon-search" @click="search"/>
               </el-input>
 
             </el-form-item>
@@ -23,7 +23,6 @@
           </el-form>
         </div>
       </div>
-
 
       <el-table
         v-loading="listLoading"
@@ -45,44 +44,43 @@
           </template>
 
         </el-table-column>
-        <el-table-column align="center" :label="dateTitle[0]">
+        <el-table-column :label="dateTitle[0]" align="center">
           <template slot-scope="scope">
             {{ scope.row.analysis[0].count }}
           </template>
         </el-table-column>
-        <el-table-column align="center" :label="dateTitle[1]">
+        <el-table-column :label="dateTitle[1]" align="center">
           <template slot-scope="scope">
             {{ scope.row.analysis[1].count }}
           </template>
         </el-table-column>
-        <el-table-column align="center" :label="dateTitle[2]">
+        <el-table-column :label="dateTitle[2]" align="center">
           <template slot-scope="scope">
             {{ scope.row.analysis[2].count }}
           </template>
         </el-table-column>
-        <el-table-column align="center" :label="dateTitle[3]">
+        <el-table-column :label="dateTitle[3]" align="center">
           <template slot-scope="scope">
             {{ scope.row.analysis[3].count }}
           </template>
         </el-table-column>
-        <el-table-column align="center" :label="dateTitle[4]">
+        <el-table-column :label="dateTitle[4]" align="center">
           <template slot-scope="scope">
             {{ scope.row.analysis[4].count }}
           </template>
         </el-table-column>
-        <el-table-column align="center" :label="dateTitle[5]">
+        <el-table-column :label="dateTitle[5]" align="center">
           <template slot-scope="scope">
             {{ scope.row.analysis[5].count }}
           </template>
         </el-table-column>
-        <el-table-column align="center" :label="dateTitle[6]">
+        <el-table-column :label="dateTitle[6]" align="center">
           <template slot-scope="scope">
             {{ scope.row.analysis[6].count }}
           </template>
         </el-table-column>
 
-
-        <el-table-column width="200" label="操作" v-if="isStaff || isSuper">
+        <el-table-column v-if="isStaff || isSuper" width="200" label="操作">
           <template slot-scope="scope">
             <el-button-group>
 
@@ -101,107 +99,106 @@
 
     </div>
 
-
   </div>
 </template>
 <script type="text/javascript">
-  import { analysis } from '@/api/market'
-  import Clipboard from 'clipboard'
-  export default {
-    name: 'MarketView',
-    filters: {
-      statusFilter(status) {
-        const statusMap = {
-          published: 'success',
-          draft: 'gray',
-          deleted: 'danger',
-          da: 'riqi'
-        }
-        return statusMap[status]
+import { analysis } from '@/api/market'
+import Clipboard from 'clipboard'
+export default {
+  name: 'MarketView',
+  filters: {
+    statusFilter(status) {
+      const statusMap = {
+        published: 'success',
+        draft: 'gray',
+        deleted: 'danger',
+        da: 'riqi'
       }
-    },
-    data() {
-      return {
-        isSuper: false,
-        list: null,
-        listLoading: true,
-        total: 0,
-        dateTitle: [],
-        postData: {
-          page: 1,
-          keyword: '',
-          state: 'all'
-        }
+      return statusMap[status]
+    }
+  },
+  data() {
+    return {
+      isSuper: false,
+      isStaff: true,
+      list: null,
+      listLoading: true,
+      total: 0,
+      dateTitle: [],
+      postData: {
+        page: 1,
+        keyword: '',
+        state: 'all'
       }
-    },
-    created() {
-      if (localStorage.getItem('role') == 'super') {
-        this.isSuper = true
-      } else if (localStorage.getItem('role') == 'staff') {
-        this.isStaff = true
-      }
-      var dateObject = new Date()
-      //今天
-      dateObject.setDate(dateObject.getDate())
-      this.dateTitle.push((dateObject.getMonth() + 1) + '月' + (dateObject.getDate()) + '日')
+    }
+  },
+  created() {
+    if (localStorage.getItem('role') == 'super') {
+      this.isSuper = true
+    } else if (localStorage.getItem('role') == 'staff') {
+      this.isStaff = true
+    }
+    var dateObject = new Date()
+    // 今天
+    dateObject.setDate(dateObject.getDate())
+    this.dateTitle.push((dateObject.getMonth() + 1) + '月' + (dateObject.getDate()) + '日')
 
-      // 昨天
-      dateObject.setDate(dateObject.getDate() - 1)
-      this.dateTitle.push((dateObject.getMonth() + 1) + '月' + (dateObject.getDate()) + '日')
-      // 前天
-      dateObject.setDate(dateObject.getDate() - 1)
-      this.dateTitle.push((dateObject.getMonth() + 1) + '月' + (dateObject.getDate()) + '日')
-      // 大前天
-      dateObject.setDate(dateObject.getDate() - 1)
-      this.dateTitle.push((dateObject.getMonth() + 1) + '月' + (dateObject.getDate()) + '日')
-      dateObject.setDate(dateObject.getDate() - 1)
-      this.dateTitle.push((dateObject.getMonth() + 1) + '月' + (dateObject.getDate()) + '日')
-      dateObject.setDate(dateObject.getDate() - 1)
-      this.dateTitle.push((dateObject.getMonth() + 1) + '月' + (dateObject.getDate()) + '日')
-      dateObject.setDate(dateObject.getDate() - 1)
-      this.dateTitle.push((dateObject.getMonth() + 1) + '月' + (dateObject.getDate()) + '日')
+    // 昨天
+    dateObject.setDate(dateObject.getDate() - 1)
+    this.dateTitle.push((dateObject.getMonth() + 1) + '月' + (dateObject.getDate()) + '日')
+    // 前天
+    dateObject.setDate(dateObject.getDate() - 1)
+    this.dateTitle.push((dateObject.getMonth() + 1) + '月' + (dateObject.getDate()) + '日')
+    // 大前天
+    dateObject.setDate(dateObject.getDate() - 1)
+    this.dateTitle.push((dateObject.getMonth() + 1) + '月' + (dateObject.getDate()) + '日')
+    dateObject.setDate(dateObject.getDate() - 1)
+    this.dateTitle.push((dateObject.getMonth() + 1) + '月' + (dateObject.getDate()) + '日')
+    dateObject.setDate(dateObject.getDate() - 1)
+    this.dateTitle.push((dateObject.getMonth() + 1) + '月' + (dateObject.getDate()) + '日')
+    dateObject.setDate(dateObject.getDate() - 1)
+    this.dateTitle.push((dateObject.getMonth() + 1) + '月' + (dateObject.getDate()) + '日')
 
+    this.fetchData()
+  },
+  methods: {
+    search() {
+      this.postData.page = 1
       this.fetchData()
     },
-    methods: {
-      search() {
-        this.postData.page = 1
-        this.fetchData()
-      },
-      fetchData() {
-        this.listLoading = true
-        analysis(this.postData).then(response => {
-          this.list = response
-          this.listLoading = false
+    fetchData() {
+      this.listLoading = true
+      analysis(this.postData).then(response => {
+        this.list = response
+        this.listLoading = false
+      })
 
+      // ,
+      // changePage(page) {
+      //   this.postData.page = page
+      //   this.fetchData()
+      // }
+    }, copy() {
+      const clipboard = new Clipboard('.tag-read')
+      clipboard.on('success', e => {
+        this.$notify({
+          title: '成功',
+          message: '复制成功！',
+          type: 'success'
         })
-
-        // ,
-        // changePage(page) {
-        //   this.postData.page = page
-        //   this.fetchData()
-        // }
-      },copy() {
-        const clipboard = new Clipboard('.tag-read')
-        clipboard.on('success', e => {
-          this.$notify({
-            title: '成功',
-            message: '复制成功！',
-            type: 'success'
-          })
-          clipboard.destroy()
+        clipboard.destroy()
+      })
+      clipboard.on('error', err => {
+        this.$notify({
+          title: '失败',
+          message: '该浏览器不支持自动复制！',
+          type: 'error'
         })
-        clipboard.on('error', err => {
-          this.$notify({
-            title: '失败',
-            message: '该浏览器不支持自动复制！',
-            type: 'error'
-          })
-          clipboard.destroy()
-        })
-      },
+        clipboard.destroy()
+      })
     }
   }
+}
 </script>
 
 <style scoped>

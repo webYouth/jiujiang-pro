@@ -13,11 +13,11 @@
             3.「今日实际结算」指今日实际付款的用户量<br>
           </div>
           <div v-if="isStaff || isSuper" style="float:right;">
-            <el-form ref="form" :inline="true" class="demo-form-inline" :model="postData">
+            <el-form ref="form" :inline="true" :model="postData" class="demo-form-inline">
 
               <el-form-item label="渠道账号或渠道名">
                 <el-input v-model="postData.keyword" placeholder="搜索渠道登录账号或渠道名">
-                  <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+                  <el-button slot="append" icon="el-icon-search" @click="search"/>
                 </el-input>
 
               </el-form-item>
@@ -103,7 +103,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column width="200" label="操作" v-if="isStaff || isSuper">
+        <el-table-column v-if="isStaff || isSuper" width="200" label="操作">
           <template slot-scope="scope">
             <el-button-group>
               <el-button
@@ -211,7 +211,7 @@ export default {
       total: 0,
       postData: {
         page: 1,
-        keyword:''
+        keyword: ''
       },
       editChannel: {
         user_name: '',

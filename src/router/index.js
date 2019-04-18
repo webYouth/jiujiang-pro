@@ -114,13 +114,13 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/market',
     name: 'market',
-    meta: { title: '贷款超市', icon: 'international', role: ['super','marketStaff'] },
+    meta: { title: '贷款超市', icon: 'international', role: ['super', 'marketStaff'] },
     children: [
       {
         path: 'marketList',
         name: 'marketList',
         component: () => import('@/views/channel/market/index'),
-        meta: { title: '贷款超市', icon: 'tree'}
+        meta: { title: '贷款超市', icon: 'tree' }
       }
     ]
   },
@@ -129,13 +129,13 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/marketAnalysis',
     name: 'marketAnalysis',
-    meta: { title: '超市数据统计', icon: 'international', role: ['super','marketStaff'] },
+    meta: { title: '超市数据统计', icon: 'international', role: ['super', 'marketStaff'] },
     children: [
       {
         path: '',
         name: '',
         component: () => import('@/views/channel/market/analysis'),
-        meta: { title: '超市数据统计', icon: 'nested'}
+        meta: { title: '超市数据统计', icon: 'nested' }
       }
     ]
   },

@@ -6,18 +6,18 @@
           <el-button type="primary" style="margin-bottom: 10px;" @click="showAddStaff = true">添加员工</el-button>
         </div>
         <div style="float:right">
-          <el-form ref="form" :inline="true" class="demo-form-inline" :model="postData">
+          <el-form ref="form" :inline="true" :model="postData" class="demo-form-inline">
 
             <el-form-item label="账号或姓名">
               <el-input v-model="postData.keyword" placeholder="搜索员工登录账号或姓名">
-                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+                <el-button slot="append" icon="el-icon-search" @click="search"/>
               </el-input>
 
             </el-form-item>
 
           </el-form>
         </div>
-        </div>
+      </div>
 
       <el-table
         v-loading="listLoading"
@@ -153,7 +153,7 @@ export default {
       total: 0,
       postData: {
         page: 1,
-        keyword:''
+        keyword: ''
       },
       editStaff: {
         user_name: '',

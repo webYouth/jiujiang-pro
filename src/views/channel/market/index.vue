@@ -6,11 +6,11 @@
           <el-button type="primary" style="margin-bottom: 10px;" @click="showAddMarket = true">添加超市</el-button>
         </div>
         <div style="float:right">
-          <el-form ref="form" :inline="true" class="demo-form-inline" :model="postData">
+          <el-form ref="form" :inline="true" :model="postData" class="demo-form-inline">
 
             <el-form-item label="产品名称">
               <el-input v-model="postData.keyword">
-                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+                <el-button slot="append" icon="el-icon-search" @click="search"/>
               </el-input>
 
             </el-form-item>
@@ -36,22 +36,22 @@
         border
         fit
         highlight-current-row>
-        <el-table-column align="center" label="ID" width="50">
+        <el-table-column align="center" fixed="left" label="ID" width="50">
           <template slot-scope="scope">
             {{ scope.row.id }}
           </template>
         </el-table-column>
-        <el-table-column show-overflow-tooltip label="超市名称">
+        <el-table-column show-overflow-tooltip fixed="left" label="超市名称">
           <template slot-scope="scope">
             {{ scope.row.name }}
           </template>
         </el-table-column>
-        <el-table-column show-overflow-tooltip label="描述说明" width="250">
+        <el-table-column show-overflow-tooltip fixed="left" label="描述说明" width="150">
           <template slot-scope="scope">
-            <p style="white-space: normal;">{{ scope.row.description }}</p>
+            <p style="white-space: normal;text-wrap: wrap;">{{ scope.row.description }}</p>
           </template>
         </el-table-column>
-        <el-table-column show-overflow-tooltip label="Logo" align="center">
+        <el-table-column show-overflow-tooltip fixed="left" label="Logo" width="150" align="center">
           <template slot-scope="scope">
             <img :src="scope.row.logo" width="80px" height="80px">
           </template>
@@ -107,14 +107,20 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="操作">
+        <el-table-column fixed="right" label="操作" width="200">
           <template slot-scope="scope">
-            <el-button-group>
-              <el-button
-                size="mini"
-                @click="handleEdit(scope.$index, scope.row)">修改
-              </el-button>
-            </el-button-group>
+            <el-button
+              size="small"
+              @click="handleEdit(scope.$index, scope.row)">修改
+            </el-button>
+            <el-upload
+              :on-success="uploadLogoSuccess"
+              :on-error="uploadLogoError"
+              :data="qiniuData"
+              class="upload-demo"
+              action="https://upload-z2.qiniup.com">
+              <el-button size="small" type="primary" @click="getClickRow(scope.row)">上传logo</el-button>
+            </el-upload>
           </template>
         </el-table-column>
       </el-table>
@@ -232,138 +238,170 @@
   </div>
 </template>
 <script type="text/javascript">
-  import { getMarketList, changeMarketInfo, addMarketInfo } from '@/api/market'
-  import Clipboard from 'clipboard'
+import { getMarketList, changeMarketInfo, addMarketInfo, getQiniuToken } from '@/api/market'
 
-  export default {
-    name: 'MarketView',
-    filters: {
-      statusFilter(status) {
-        const statusMap = {
-          published: 'success',
-          draft: 'gray',
-          deleted: 'danger',
-          da: 'riqi'
-        }
-        return statusMap[status]
+export default {
+  name: 'MarketView',
+  filters: {
+    statusFilter(status) {
+      const statusMap = {
+        published: 'success',
+        draft: 'gray',
+        deleted: 'danger',
+        da: 'riqi'
       }
-    },
-    data() {
-      return {
-
-        isSuper: false,
-        dateTitle: [],
-        list: null,
-        listLoading: true,
-        showEditMarket: false,
-        showAddMarket: false,
-        total: 0,
-        postData: {
-          page: 1,
-          keyword: '',
-          state: 'all'
-        },
-        editMarket: {},
-        addMarket: {
-          is_hot: 1,
-          is_recommend: 1
-        }
-      }
-    },
-    created() {
-      if (localStorage.getItem('role') == 'super') {
-        this.isSuper = true
-      } else if (localStorage.getItem('role') == 'staff') {
-        this.isStaff = true
-      }
-      this.fetchData()
-    },
-    methods: {
-      search() {
-        this.postData.page = 1
-        this.fetchData()
+      return statusMap[status]
+    }
+  },
+  data() {
+    return {
+      qiniuData: null,
+      token: null,
+      domain: 'https://dlimg.bepei.com/',
+      isSuper: false,
+      dateTitle: [],
+      list: null,
+      listLoading: true,
+      showEditMarket: false,
+      showAddMarket: false,
+      total: 0,
+      postData: {
+        page: 1,
+        keyword: '',
+        state: 'all'
       },
-      fetchData() {
-        this.listLoading = true
-        getMarketList(this.postData).then(response => {
-          this.list = response.data
-          this.total = response.meta.pagination.total
-          this.listLoading = false
-          console.log(this.list)
-        })
-      },
-      setState(e) {
-        this.editMarket = e
-        this.editMarket.state = e.state == 1 ? 2 : 1
-        this.submitEdit()
-      },
-      setHot(e) {
-        this.editMarket = e
-        console.log(this.editMarket)
-        this.editMarket.is_hot = e.is_hot == 1 ? 2 : 1
-        this.submitEdit()
-      },
-      setRecommend(e) {
-        this.editMarket = e
-        this.editMarket.is_recommend = e.is_recommend == 1 ? 2 : 1
-        this.submitEdit()
-      },
-      changePage(page) {
-        this.postData.page = page
-        this.fetchData()
-      },
-      handleEdit(idx, row) {
-        this.editMarket = row
-        this.showEditMarket = true
-      },
-      submitEdit() {
-        changeMarketInfo(this.editMarket.id, this.editMarket).then(response => {
-          if (response.id != undefined) {
-            this.showEditMarket = false
-            for (var p in this.list) {
-              if (this.list[p].id == this.editMarket.id) {
-                this.list[p] = this.editMarket
-              }
-            }
-
-            this.$notify({
-              title: '成功',
-              message: '修改成功',
-              type: 'success'
-            })
-          } else {
-            this.$notify.error({
-              title: '错误',
-              message: '修改失败'
-            })
-          }
-        })
-      },
-      submitAdd() {
-        console.log(this.addMarket)
-        addMarketInfo(this.addMarket).then(response => {
-          if (response.id != undefined) {
-            this.showAddMarket = false
-            this.addMarket.price = ''
-            this.addMarket.id = null
-            this.addMarket.user_name = ''
-            this.addMarket.password = ''
-            this.$notify({
-              title: '成功',
-              message: '添加成功',
-              type: 'success'
-            })
-            this.fetchData()
-          } else {
-            this.$notify.error({
-              title: '错误',
-              message: '添加失败'
-            })
-          }
-        })
+      editMarket: {},
+      addMarket: {
+        is_hot: 1,
+        is_recommend: 1
       }
     }
+  },
+  created() {
+    if (localStorage.getItem('role') == 'super') {
+      this.isSuper = true
+    } else if (localStorage.getItem('role') == 'staff') {
+      this.isStaff = true
+    }
+    this.fetchData()
+  },
+  mounted() {
+    this.getQiniuToken()
+  },
+  methods: {
+    getQiniuToken() {
+      const params = {
+        suffix: '.png'
+      }
+      getQiniuToken(params).then(res => {
+        this.token = res.token
+        this.domain = res.domain + '/'
+        this.qiniuData = {
+          token: this.token,
+          // key: res.data.imgUrl,
+          'x:<custom_name>': 'webCoder'
+        }
+      })
+    },
+    getClickRow(row) {
+      this.editMarket = row
+    },
+    uploadLogoSuccess(res) {
+      const logoPicUrl = this.domain + res.hash
+      this.editMarket.logo = logoPicUrl
+      this.submitEdit()
+    },
+    uploadLogoError() {
+      this.$notify.error({
+        title: '错误',
+        message: '上传失败!'
+      })
+    },
+    search() {
+      this.postData.page = 1
+      this.fetchData()
+    },
+    fetchData() {
+      this.listLoading = true
+      getMarketList(this.postData).then(response => {
+        this.list = response.data
+        this.total = response.meta.pagination.total
+        this.listLoading = false
+        console.log(this.list)
+      })
+    },
+    setState(e) {
+      this.editMarket = e
+      this.editMarket.state = e.state == 1 ? 2 : 1
+      this.submitEdit()
+    },
+    setHot(e) {
+      this.editMarket = e
+      console.log(this.editMarket)
+      this.editMarket.is_hot = e.is_hot == 1 ? 2 : 1
+      this.submitEdit()
+    },
+    setRecommend(e) {
+      this.editMarket = e
+      this.editMarket.is_recommend = e.is_recommend == 1 ? 2 : 1
+      this.submitEdit()
+    },
+    changePage(page) {
+      this.postData.page = page
+      this.fetchData()
+    },
+    handleEdit(idx, row) {
+      this.editMarket = row
+      this.showEditMarket = true
+    },
+    submitEdit() {
+      changeMarketInfo(this.editMarket.id, this.editMarket).then(response => {
+        if (response.id != undefined) {
+          this.showEditMarket = false
+          for (var p in this.list) {
+            if (this.list[p].id == this.editMarket.id) {
+              this.list[p] = this.editMarket
+            }
+          }
+
+          this.$notify({
+            title: '成功',
+            message: '修改成功',
+            type: 'success'
+          })
+        } else {
+          this.$notify.error({
+            title: '错误',
+            message: '修改失败'
+          })
+        }
+      })
+    },
+    submitAdd() {
+      console.log(this.addMarket)
+      addMarketInfo(this.addMarket).then(response => {
+        if (response.id != undefined) {
+          this.showAddMarket = false
+          this.addMarket.price = ''
+          this.addMarket.id = null
+          this.addMarket.user_name = ''
+          this.addMarket.password = ''
+          this.$notify({
+            title: '成功',
+            message: '添加成功',
+            type: 'success'
+          })
+          this.fetchData()
+        } else {
+          this.$notify.error({
+            title: '错误',
+            message: '添加失败'
+          })
+        }
+      })
+    }
   }
+}
 </script>
 
 <style scoped>
@@ -383,5 +421,8 @@
     left: 0;
     right: 0;
     padding: 0 10px;
+  }
+  .upload-demo {
+    display: inline-block;
   }
 </style>

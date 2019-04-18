@@ -47,6 +47,17 @@ export function changeMarketInfo(id, params) {
   })
 }
 
+export function getQiniuToken(params) {
+  return request({
+    url: 'qiniu/token',
+    method: 'get',
+    data: params,
+    headers: {
+      'Authorization': 'Bearer ' + getToken()
+    }
+  })
+}
+
 //
 // const changeMarketInfo = (params, headers) => {
 //   return request.put(`m/channel`, params, {
