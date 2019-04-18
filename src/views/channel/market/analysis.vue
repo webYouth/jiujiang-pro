@@ -1,6 +1,29 @@
 <template>
   <div class="app-container">
     <div class="app-content">
+      <div style="padding-bottom:5px;overflow:hidden;">
+
+        <div style="float:right">
+          <el-form ref="form" :inline="true" class="demo-form-inline" :model="postData">
+
+            <el-form-item label="产品名称">
+              <el-input v-model="postData.keyword">
+                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+              </el-input>
+
+            </el-form-item>
+
+            <el-form-item label="上下架状态">
+              <el-radio-group v-model="postData.state" @change="search">
+                <el-radio-button label="all">全部</el-radio-button>
+                <el-radio-button label="1">已上架</el-radio-button>
+                <el-radio-button label="2">已下架</el-radio-button>
+              </el-radio-group>
+            </el-form-item>
+          </el-form>
+        </div>
+      </div>
+
 
       <el-table
         v-loading="listLoading"
@@ -58,6 +81,22 @@
           </template>
         </el-table-column>
 
+
+        <el-table-column width="200" label="操作" v-if="isStaff || isSuper">
+          <template slot-scope="scope">
+            <el-button-group>
+
+              <el-button
+                :data-clipboard-text="`https://house.rangni.cn/api/redirect?id=${scope.row.id}`"
+                size="mini"
+                type="primary"
+                class="tag-read"
+                @click="copy">复制链接
+              </el-button>
+            </el-button-group>
+          </template>
+        </el-table-column>
+
       </el-table>
 
     </div>
@@ -67,7 +106,7 @@
 </template>
 <script type="text/javascript">
   import { analysis } from '@/api/market'
-
+  import Clipboard from 'clipboard'
   export default {
     name: 'MarketView',
     filters: {
@@ -89,7 +128,9 @@
         total: 0,
         dateTitle: [],
         postData: {
-          page: 1
+          page: 1,
+          keyword: '',
+          state: 'all'
         }
       }
     },
@@ -120,10 +161,13 @@
       dateObject.setDate(dateObject.getDate() - 1)
       this.dateTitle.push((dateObject.getMonth() + 1) + '月' + (dateObject.getDate()) + '日')
 
-
       this.fetchData()
     },
     methods: {
+      search() {
+        this.postData.page = 1
+        this.fetchData()
+      },
       fetchData() {
         this.listLoading = true
         analysis(this.postData).then(response => {
@@ -137,7 +181,25 @@
         //   this.postData.page = page
         //   this.fetchData()
         // }
-      }
+      },copy() {
+        const clipboard = new Clipboard('.tag-read')
+        clipboard.on('success', e => {
+          this.$notify({
+            title: '成功',
+            message: '复制成功！',
+            type: 'success'
+          })
+          clipboard.destroy()
+        })
+        clipboard.on('error', err => {
+          this.$notify({
+            title: '失败',
+            message: '该浏览器不支持自动复制！',
+            type: 'error'
+          })
+          clipboard.destroy()
+        })
+      },
     }
   }
 </script>

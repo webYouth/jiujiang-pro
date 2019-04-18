@@ -5,11 +5,26 @@
         <div style="float:left;">
           <el-button v-if="isStaff" type="primary" style="margin-bottom: 10px;" @click="showAddChannel = true">添加渠道</el-button>
         </div>
-        <div v-if="isSuper" style="float:right;color:gray;font-size:0.9rem;">
-          <!--<i class="el-icon-question" style="color:#F56C6C;"></i>-->
-          1.「今日注册」指今日实际注册人数<br>
-          2.「今日结算」指今日需要为渠道结算的用户量<br>
-          3.「今日实际结算」指今日实际付款的用户量<br>
+        <div style="float:right;color:gray;font-size:0.9rem;">
+
+          <div v-if="isSuper" style="float:right;">
+            1.「今日注册」指今日实际注册人数<br>
+            2.「今日结算」指今日需要为渠道结算的用户量<br>
+            3.「今日实际结算」指今日实际付款的用户量<br>
+          </div>
+          <div v-if="isStaff || isSuper" style="float:right;">
+            <el-form ref="form" :inline="true" class="demo-form-inline" :model="postData">
+
+              <el-form-item label="渠道账号或渠道名">
+                <el-input v-model="postData.keyword" placeholder="搜索渠道登录账号或渠道名">
+                  <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+                </el-input>
+
+              </el-form-item>
+
+            </el-form>
+          </div>
+
         </div>
       </div>
 
@@ -195,7 +210,8 @@ export default {
       showAddChannel: false,
       total: 0,
       postData: {
-        page: 1
+        page: 1,
+        keyword:''
       },
       editChannel: {
         user_name: '',
@@ -237,6 +253,10 @@ export default {
     this.fetchData()
   },
   methods: {
+    search() {
+      this.postData.page = 1
+      this.fetchData()
+    },
     fetchData() {
       this.listLoading = true
       getChannelList(this.postData).then(response => {
@@ -329,6 +349,10 @@ export default {
 </script>
 
 <style scoped>
+
+  .el-select .el-input {
+    width: 300px;
+  }
   .app-content {
     position: relative;
     padding: 0 10px 60px 10px;

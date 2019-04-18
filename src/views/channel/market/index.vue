@@ -5,6 +5,26 @@
         <div style="float:left;">
           <el-button type="primary" style="margin-bottom: 10px;" @click="showAddMarket = true">添加超市</el-button>
         </div>
+        <div style="float:right">
+          <el-form ref="form" :inline="true" class="demo-form-inline" :model="postData">
+
+            <el-form-item label="产品名称">
+              <el-input v-model="postData.keyword">
+                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+              </el-input>
+
+            </el-form-item>
+
+            <el-form-item label="上下架状态">
+              <el-radio-group v-model="postData.state" @change="search">
+                <el-radio-button label="all">全部</el-radio-button>
+                <el-radio-button label="1">已上架</el-radio-button>
+                <el-radio-button label="2">已下架</el-radio-button>
+              </el-radio-group>
+            </el-form-item>
+          </el-form>
+
+        </div>
 
       </div>
 
@@ -212,131 +232,138 @@
   </div>
 </template>
 <script type="text/javascript">
-import { getMarketList, changeMarketInfo, addMarketInfo } from '@/api/market'
-import Clipboard from 'clipboard'
+  import { getMarketList, changeMarketInfo, addMarketInfo } from '@/api/market'
+  import Clipboard from 'clipboard'
 
-export default {
-  name: 'MarketView',
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'gray',
-        deleted: 'danger',
-        da: 'riqi'
+  export default {
+    name: 'MarketView',
+    filters: {
+      statusFilter(status) {
+        const statusMap = {
+          published: 'success',
+          draft: 'gray',
+          deleted: 'danger',
+          da: 'riqi'
+        }
+        return statusMap[status]
       }
-      return statusMap[status]
-    }
-  },
-  data() {
-    return {
-      isSuper: false,
-      dateTitle: [],
-      list: null,
-      listLoading: true,
-      showEditMarket: false,
-      showAddMarket: false,
-      total: 0,
-      postData: {
-        page: 1
-      },
-      editMarket: {},
-      addMarket: {
-        is_hot: 1,
-        is_recommend: 1
+    },
+    data() {
+      return {
+
+        isSuper: false,
+        dateTitle: [],
+        list: null,
+        listLoading: true,
+        showEditMarket: false,
+        showAddMarket: false,
+        total: 0,
+        postData: {
+          page: 1,
+          keyword: '',
+          state: 'all'
+        },
+        editMarket: {},
+        addMarket: {
+          is_hot: 1,
+          is_recommend: 1
+        }
       }
-    }
-  },
-  created() {
-    if (localStorage.getItem('role') == 'super') {
-      this.isSuper = true
-    } else if (localStorage.getItem('role') == 'staff') {
-      this.isStaff = true
-    }
-    this.fetchData()
-  },
-  methods: {
-    fetchData() {
-      this.listLoading = true
-      getMarketList(this.postData).then(response => {
-        this.list = response.data
-        this.total = response.meta.pagination.total
-        this.listLoading = false
-        console.log(this.list)
-      })
     },
-    setState(e) {
-      this.editMarket = e
-      this.editMarket.state = e.state == 1 ? 2 : 1
-      this.submitEdit()
-    },
-    setHot(e) {
-      this.editMarket = e
-      console.log(this.editMarket)
-      this.editMarket.is_hot = e.is_hot == 1 ? 2 : 1
-      this.submitEdit()
-    },
-    setRecommend(e) {
-      this.editMarket = e
-      this.editMarket.is_recommend = e.is_recommend == 1 ? 2 : 1
-      this.submitEdit()
-    },
-    changePage(page) {
-      this.postData.page = page
+    created() {
+      if (localStorage.getItem('role') == 'super') {
+        this.isSuper = true
+      } else if (localStorage.getItem('role') == 'staff') {
+        this.isStaff = true
+      }
       this.fetchData()
     },
-    handleEdit(idx, row) {
-      this.editMarket = row
-      this.showEditMarket = true
-    },
-    submitEdit() {
-      changeMarketInfo(this.editMarket.id, this.editMarket).then(response => {
-        if (response.id != undefined) {
-          this.showEditMarket = false
-          for (var p in this.list) {
-            if (this.list[p].id == this.editMarket.id) {
-              this.list[p] = this.editMarket
+    methods: {
+      search() {
+        this.postData.page = 1
+        this.fetchData()
+      },
+      fetchData() {
+        this.listLoading = true
+        getMarketList(this.postData).then(response => {
+          this.list = response.data
+          this.total = response.meta.pagination.total
+          this.listLoading = false
+          console.log(this.list)
+        })
+      },
+      setState(e) {
+        this.editMarket = e
+        this.editMarket.state = e.state == 1 ? 2 : 1
+        this.submitEdit()
+      },
+      setHot(e) {
+        this.editMarket = e
+        console.log(this.editMarket)
+        this.editMarket.is_hot = e.is_hot == 1 ? 2 : 1
+        this.submitEdit()
+      },
+      setRecommend(e) {
+        this.editMarket = e
+        this.editMarket.is_recommend = e.is_recommend == 1 ? 2 : 1
+        this.submitEdit()
+      },
+      changePage(page) {
+        this.postData.page = page
+        this.fetchData()
+      },
+      handleEdit(idx, row) {
+        this.editMarket = row
+        this.showEditMarket = true
+      },
+      submitEdit() {
+        changeMarketInfo(this.editMarket.id, this.editMarket).then(response => {
+          if (response.id != undefined) {
+            this.showEditMarket = false
+            for (var p in this.list) {
+              if (this.list[p].id == this.editMarket.id) {
+                this.list[p] = this.editMarket
+              }
             }
-          }
 
-          this.$notify({
-            title: '成功',
-            message: '修改成功',
-            type: 'success'
-          })
-        } else {
-          this.$notify.error({
-            title: '错误',
-            message: '修改失败'
-          })
-        }
-      })
-    },
-    submitAdd() {
-      console.log(this.addMarket)
-      addMarketInfo(this.addMarket).then(response => {
-        if (response.id != undefined) {
-          this.showAddMarket = false
-          this.addMarket.price = ''
-          this.addMarket.id = null
-          this.addMarket.user_name = ''
-          this.addMarket.password = ''
-          this.$notify({
-            title: '成功',
-            message: '添加成功',
-            type: 'success'
-          })
-          this.fetchData()
-        } else {
-          this.$notify.error({
-            title: '错误',
-            message: '添加失败'
-          })
-        }
-      })
+            this.$notify({
+              title: '成功',
+              message: '修改成功',
+              type: 'success'
+            })
+          } else {
+            this.$notify.error({
+              title: '错误',
+              message: '修改失败'
+            })
+          }
+        })
+      },
+      submitAdd() {
+        console.log(this.addMarket)
+        addMarketInfo(this.addMarket).then(response => {
+          if (response.id != undefined) {
+            this.showAddMarket = false
+            this.addMarket.price = ''
+            this.addMarket.id = null
+            this.addMarket.user_name = ''
+            this.addMarket.password = ''
+            this.$notify({
+              title: '成功',
+              message: '添加成功',
+              type: 'success'
+            })
+            this.fetchData()
+          } else {
+            this.$notify.error({
+              title: '错误',
+              message: '添加失败'
+            })
+          }
+        })
+      }
     }
   }
-}
 </script>
 
 <style scoped>

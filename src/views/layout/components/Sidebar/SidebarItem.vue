@@ -63,10 +63,7 @@ export default {
   },
   methods: {
     judgeIsInArray(array) {
-      console.log(array);
-      console.log(this.role);
       let index = array.meta.role.indexOf(this.role)
-      console.log(index)
       return !(index === -1)
     },
     hasOneShowingChild(children = [], parent) {

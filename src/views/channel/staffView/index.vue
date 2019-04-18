@@ -5,8 +5,19 @@
         <div style="float:left;">
           <el-button type="primary" style="margin-bottom: 10px;" @click="showAddStaff = true">添加员工</el-button>
         </div>
-        <div style="float:right;color:gray;font-size:0.9rem;"/>
-      </div>
+        <div style="float:right">
+          <el-form ref="form" :inline="true" class="demo-form-inline" :model="postData">
+
+            <el-form-item label="账号或姓名">
+              <el-input v-model="postData.keyword" placeholder="搜索员工登录账号或姓名">
+                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+              </el-input>
+
+            </el-form-item>
+
+          </el-form>
+        </div>
+        </div>
 
       <el-table
         v-loading="listLoading"
@@ -141,7 +152,8 @@ export default {
       showAddStaff: false,
       total: 0,
       postData: {
-        page: 1
+        page: 1,
+        keyword:''
       },
       editStaff: {
         user_name: '',
@@ -163,6 +175,10 @@ export default {
     this.fetchData()
   },
   methods: {
+    search() {
+      this.postData.page = 1
+      this.fetchData()
+    },
     fetchData() {
       this.listLoading = true
       getStaffList(this.postData).then(response => {
