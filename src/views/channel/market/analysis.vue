@@ -80,17 +80,23 @@
           </template>
         </el-table-column>
 
+        <el-table-column label="二维码" align="center" width="120">
+        <template slot-scope="scope">
+        <img :id="scope.row.qrCodeId" src="" width="100px"/>
+        </template>
+        </el-table-column>
+
         <el-table-column v-if="isStaff || isSuper" width="200" label="操作">
           <template slot-scope="scope">
             <el-button-group>
-
               <el-button
-                :data-clipboard-text="`https://house.rangni.cn/api/redirect?id=${scope.row.id}`"
+                :data-clipboard-text="`http://www.qingbiandai.com/api/redirect?id=${scope.row.id}`"
                 size="mini"
                 type="primary"
                 class="tag-read"
                 @click="copy">复制链接
               </el-button>
+
             </el-button-group>
           </template>
         </el-table-column>
@@ -98,107 +104,170 @@
       </el-table>
 
     </div>
-
+    <img id="canvas" style="display:none;"></img>
   </div>
 </template>
 <script type="text/javascript">
-import { analysis } from '@/api/market'
-import Clipboard from 'clipboard'
-export default {
-  name: 'MarketView',
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'gray',
-        deleted: 'danger',
-        da: 'riqi'
+  import { analysis } from '@/api/market'
+  import Clipboard from 'clipboard'
+  import QrCodeWithLogo from 'qr-code-with-logo'
+  export default {
+    name: 'MarketView',
+    filters: {
+      statusFilter(status) {
+        const statusMap = {
+          published: 'success',
+          draft: 'gray',
+          deleted: 'danger',
+          da: 'riqi'
+        }
+        return statusMap[status]
       }
-      return statusMap[status]
-    }
-  },
-  data() {
-    return {
-      isSuper: false,
-      isStaff: true,
-      list: null,
-      listLoading: true,
-      total: 0,
-      dateTitle: [],
-      postData: {
-        page: 1,
-        keyword: '',
-        state: 'all'
-      }
-    }
-  },
-  created() {
-    if (localStorage.getItem('role') == 'super') {
-      this.isSuper = true
-    } else if (localStorage.getItem('role') == 'staff') {
-      this.isStaff = true
-    }
-    var dateObject = new Date()
-    // 今天
-    dateObject.setDate(dateObject.getDate())
-    this.dateTitle.push((dateObject.getMonth() + 1) + '月' + (dateObject.getDate()) + '日')
-
-    // 昨天
-    dateObject.setDate(dateObject.getDate() - 1)
-    this.dateTitle.push((dateObject.getMonth() + 1) + '月' + (dateObject.getDate()) + '日')
-    // 前天
-    dateObject.setDate(dateObject.getDate() - 1)
-    this.dateTitle.push((dateObject.getMonth() + 1) + '月' + (dateObject.getDate()) + '日')
-    // 大前天
-    dateObject.setDate(dateObject.getDate() - 1)
-    this.dateTitle.push((dateObject.getMonth() + 1) + '月' + (dateObject.getDate()) + '日')
-    dateObject.setDate(dateObject.getDate() - 1)
-    this.dateTitle.push((dateObject.getMonth() + 1) + '月' + (dateObject.getDate()) + '日')
-    dateObject.setDate(dateObject.getDate() - 1)
-    this.dateTitle.push((dateObject.getMonth() + 1) + '月' + (dateObject.getDate()) + '日')
-    dateObject.setDate(dateObject.getDate() - 1)
-    this.dateTitle.push((dateObject.getMonth() + 1) + '月' + (dateObject.getDate()) + '日')
-
-    this.fetchData()
-  },
-  methods: {
-    search() {
-      this.postData.page = 1
-      this.fetchData()
     },
-    fetchData() {
-      this.listLoading = true
-      analysis(this.postData).then(response => {
-        this.list = response
-        this.listLoading = false
-      })
+    data() {
+      return {
+        isSuper: false,
+        isStaff: true,
+        list: null,
+        listLoading: true,
+        total: 0,
+        dateTitle: [],
+        postData: {
+          page: 1,
+          keyword: '',
+          state: 'all'
+        }
+      }
+    },
+    created() {
+      if (localStorage.getItem('role') == 'super') {
+        this.isSuper = true
+      } else if (localStorage.getItem('role') == 'staff') {
+        this.isStaff = true
+      }
+      var dateObject = new Date()
+      // 今天
+      dateObject.setDate(dateObject.getDate())
+      this.dateTitle.push((dateObject.getMonth() + 1) + '月' + (dateObject.getDate()) + '日')
 
-      // ,
-      // changePage(page) {
-      //   this.postData.page = page
-      //   this.fetchData()
+      // 昨天
+      dateObject.setDate(dateObject.getDate() - 1)
+      this.dateTitle.push((dateObject.getMonth() + 1) + '月' + (dateObject.getDate()) + '日')
+      // 前天
+      dateObject.setDate(dateObject.getDate() - 1)
+      this.dateTitle.push((dateObject.getMonth() + 1) + '月' + (dateObject.getDate()) + '日')
+      // 大前天
+      dateObject.setDate(dateObject.getDate() - 1)
+      this.dateTitle.push((dateObject.getMonth() + 1) + '月' + (dateObject.getDate()) + '日')
+      dateObject.setDate(dateObject.getDate() - 1)
+      this.dateTitle.push((dateObject.getMonth() + 1) + '月' + (dateObject.getDate()) + '日')
+      dateObject.setDate(dateObject.getDate() - 1)
+      this.dateTitle.push((dateObject.getMonth() + 1) + '月' + (dateObject.getDate()) + '日')
+      dateObject.setDate(dateObject.getDate() - 1)
+      this.dateTitle.push((dateObject.getMonth() + 1) + '月' + (dateObject.getDate()) + '日')
+
+      this.fetchData()
+
+      // const myCanvas = document.createElement('canvas')
+      // document.body.appendChild(myCanvas)
+      //
+      // QrCodeWithLogo.toCanvas({
+      //   canvas: canvas,
+      //   content: 'https://cdn.blog.cloudself.cn',
+      //   width: 380,
+      //   logo: {
+      //     src: 'http://mweb.aoxiang.me/Fpapf1EhFql0m1iEyMLAdgoBfnkQ',
+      //     radius: 8
+      //   }
+      // })
+
+    },
+    watch: {
+      // list:function(){
+      //   for(var p in this.list)
+      //   {
+      //     console.log(this.list[p].logo);
+      //     var logo = this.list[p].logo;
+      //     var url = 'http://www.qingbiandai.com/api/redirect?id='+this.list[p].id;
+      //     // QrCodeWithLogo.toImage({
+      //     //   image: this.list[p].qrCodeId,
+      //     //   content: url,
+      //     //   width: 380,
+      //     //   logo: {
+      //     //     src: logo,
+      //     //     radius: 8
+      //     //   }
+      //     // });
+      //   }
       // }
-    }, copy() {
-      const clipboard = new Clipboard('.tag-read')
-      clipboard.on('success', e => {
-        this.$notify({
-          title: '成功',
-          message: '复制成功！',
-          type: 'success'
+    },
+    methods: {
+      search() {
+        this.postData.page = 1
+        this.fetchData()
+      },
+      fetchData() {
+        this.listLoading = true
+        analysis(this.postData).then(response => {
+          for (var p in response) {
+            response[p].qrCodeId = 'qrcode_' + response[p].id
+          }
+          this.list = response
+          this.listLoading = false
+          let _this = this;
+          setTimeout(function(){
+            _this.createQrCode();
+          },1000);
+
         })
-        clipboard.destroy()
-      })
-      clipboard.on('error', err => {
-        this.$notify({
-          title: '失败',
-          message: '该浏览器不支持自动复制！',
-          type: 'error'
+
+        // ,
+        // changePage(page) {
+        //   this.postData.page = page
+        //   this.fetchData()
+        // }
+      }, copy() {
+        const clipboard = new Clipboard('.tag-read')
+        clipboard.on('success', e => {
+          this.$notify({
+            title: '成功',
+            message: '复制成功！',
+            type: 'success'
+          })
+          clipboard.destroy()
         })
-        clipboard.destroy()
-      })
+        clipboard.on('error', err => {
+          this.$notify({
+            title: '失败',
+            message: '该浏览器不支持自动复制！',
+            type: 'error'
+          })
+          clipboard.destroy()
+        })
+      },
+      createQrCode() {
+        var _this = this;
+        for (var p in this.list) {
+          var logo = this.list[p].logo
+          var url = 'http://www.qingbiandai.com/api/redirect?id=' + this.list[p].id
+          // console.log(document.getElementById(this.list[p].qrCodeId).src);
+          QrCodeWithLogo.toImage({
+            image: canvas,
+            content: url,
+            width: 380,
+            logo: {
+              src: logo,
+              radius: 8
+            }
+          });
+          window.setTimeout(function(){
+            document.getElementById(_this.list[p].qrCodeId).src = document.getElementById('canvas').src;
+          },500);
+
+        }
+      }
     }
   }
-}
 </script>
 
 <style scoped>

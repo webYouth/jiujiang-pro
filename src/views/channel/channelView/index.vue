@@ -111,7 +111,7 @@
                 @click="handleEdit(scope.$index, scope.row)">修改
               </el-button>
               <el-button
-                :data-clipboard-text="`https://house.rangni.cn/index.html?channel_id=${scope.row.id}`"
+                :data-clipboard-text="`http://www.qingbiandai.com/index.html?channel_id=${scope.row.id}`"
                 size="mini"
                 type="primary"
                 class="tag-read"

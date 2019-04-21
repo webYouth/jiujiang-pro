@@ -106,7 +106,11 @@
             {{ scope.row.sort }}
           </template>
         </el-table-column>
-
+        <el-table-column label="二维码" align="center" width="120">
+          <template slot-scope="scope">
+            <img :id="scope.row.qrCodeId" src="" width="100px"/>
+          </template>
+        </el-table-column>
         <el-table-column fixed="right" label="操作" width="200">
           <template slot-scope="scope">
             <el-button
@@ -234,12 +238,12 @@
         <el-button type="primary" @click="submitAdd">确 定</el-button>
       </span>
     </el-dialog>
-
+    <img id="canvas" style="display:none;"></img>
   </div>
 </template>
 <script type="text/javascript">
 import { getMarketList, changeMarketInfo, addMarketInfo, getQiniuToken } from '@/api/market'
-
+import QrCodeWithLogo from 'qr-code-with-logo'
 export default {
   name: 'MarketView',
   filters: {
@@ -324,11 +328,38 @@ export default {
     fetchData() {
       this.listLoading = true
       getMarketList(this.postData).then(response => {
+        for (var p in response.data) {
+          response.data[p].qrCodeId = 'qrcode_' + response.data[p].id
+        }
         this.list = response.data
         this.total = response.meta.pagination.total
         this.listLoading = false
-        console.log(this.list)
+        let _this = this;
+        setTimeout(function(){
+          _this.createQrCode();
+        },1000);
       })
+    },
+    createQrCode() {
+      var _this = this;
+      for (var p in this.list) {
+        var logo = this.list[p].logo
+        var url = 'http://www.qingbiandai.com/api/redirect?id=' + this.list[p].id
+        // console.log(document.getElementById(this.list[p].qrCodeId).src);
+        QrCodeWithLogo.toImage({
+          image: canvas,
+          content: url,
+          width: 380,
+          logo: {
+            src: logo,
+            radius: 8
+          }
+        });
+        window.setTimeout(function(){
+          document.getElementById(_this.list[p].qrCodeId).src = document.getElementById('canvas').src;
+        },500);
+
+      }
     },
     setState(e) {
       this.editMarket = e
