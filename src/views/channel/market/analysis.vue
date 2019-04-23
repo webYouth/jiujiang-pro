@@ -128,7 +128,7 @@
       return {
         isSuper: false,
         isStaff: true,
-        list: null,
+        list: [],
         listLoading: true,
         total: 0,
         dateTitle: [],

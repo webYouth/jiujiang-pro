@@ -146,7 +146,7 @@ export default {
     return {
       isSuper: false,
       dateTitle: [],
-      list: null,
+      list: [],
       listLoading: true,
       showEditStaff: false,
       showAddStaff: false,

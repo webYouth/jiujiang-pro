@@ -169,10 +169,13 @@ import { getAllUserList, getVerifyUserList } from '@/api/user'
         })
       },
       fetchVerifyUserData () {
+        this.postData.page = 1;
+        this.total = 0;
         this.listLoading = true
         getVerifyUserList(this.postData).then( res => {
           this.userList = res.data
           this.listLoading = false
+          this.total = res.meta.pagination.total
         })
       },
       changePage (page) {

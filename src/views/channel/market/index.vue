@@ -264,7 +264,7 @@ export default {
       domain: 'https://dlimg.bepei.com/',
       isSuper: false,
       dateTitle: [],
-      list: null,
+      list: [],
       listLoading: true,
       showEditMarket: false,
       showAddMarket: false,

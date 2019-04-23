@@ -204,7 +204,7 @@ export default {
       isSuper: false,
       isStaff: false,
       dateTitle: [],
-      list: null,
+      list: [],
       listLoading: true,
       showEditChannel: false,
       showAddChannel: false,
