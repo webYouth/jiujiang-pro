@@ -106,9 +106,14 @@
             {{ scope.row.sort }}
           </template>
         </el-table-column>
-        <el-table-column label="二维码" align="center" width="120">
+        <el-table-column label="二维码" align="center" width="400">
           <template slot-scope="scope">
-            <img :id="scope.row.qrCodeId" src="" width="100px"/>
+            <qrcode
+              :value="`http://www.qingbiandai.com/api/redirect?id=${scope.row.qrCodeId}`"
+              :options="{ size: 100 }"
+              tag="img"
+              style="margin: 10px 59px;">
+            </qrcode>
           </template>
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="200">
@@ -243,9 +248,13 @@
 </template>
 <script type="text/javascript">
 import { getMarketList, changeMarketInfo, addMarketInfo, getQiniuToken } from '@/api/market'
-import QrCodeWithLogo from 'qr-code-with-logo'
+import Qrcode from '@chenfengyuan/vue-qrcode'
+
 export default {
   name: 'MarketView',
+  components: {
+    Qrcode
+  },
   filters: {
     statusFilter(status) {
       const statusMap = {
@@ -334,32 +343,11 @@ export default {
         this.list = response.data
         this.total = response.meta.pagination.total
         this.listLoading = false
-        let _this = this;
-        setTimeout(function(){
-          _this.createQrCode();
-        },1000);
+        const _this = this
+        setTimeout(function() {
+          _this.createQrCode()
+        }, 1000)
       })
-    },
-    createQrCode() {
-      var _this = this;
-      for (var p in this.list) {
-        var logo = this.list[p].logo
-        var url = 'http://www.qingbiandai.com/api/redirect?id=' + this.list[p].id
-        // console.log(document.getElementById(this.list[p].qrCodeId).src);
-        QrCodeWithLogo.toImage({
-          image: canvas,
-          content: url,
-          width: 380,
-          logo: {
-            src: logo,
-            radius: 8
-          }
-        });
-        window.setTimeout(function(){
-          document.getElementById(_this.list[p].qrCodeId).src = document.getElementById('canvas').src;
-        },500);
-
-      }
     },
     setState(e) {
       this.editMarket = e

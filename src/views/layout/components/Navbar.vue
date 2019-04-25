@@ -7,10 +7,10 @@
             <el-input v-model="editPassword.old_password"/>
           </el-form-item>
           <el-form-item label="新密码">
-            <el-input type="password" v-model="editPassword.password"/>
+            <el-input v-model="editPassword.password" type="password"/>
           </el-form-item>
           <el-form-item label="重复输入新密码">
-            <el-input type="password" v-model="editPassword.password_confirmation"/>
+            <el-input v-model="editPassword.password_confirmation" type="password"/>
           </el-form-item>
         </el-form>
       </div>
@@ -60,7 +60,7 @@ import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import { checkPermission } from '../../../utils/auth'
-import {changePassword} from '../../../api/login'
+import { changePassword } from '../../../api/login'
 
 export default {
   components: {
@@ -70,11 +70,11 @@ export default {
   data() {
     return {
       user_name: '',
-      showPasswordModal:false,
-      editPassword:{
-        old_password:'',
-        new_password:'',
-        password_confirmation:''
+      showPasswordModal: false,
+      editPassword: {
+        old_password: '',
+        new_password: '',
+        password_confirmation: ''
 
       }
     }
@@ -98,24 +98,20 @@ export default {
         location.reload() // 为了重新实例化vue-router对象 避免bug
       })
     },
-    changePassword()
-    {
+    changePassword() {
       changePassword(this.editPassword).then(response => {
+        this.$notify({
+          title: '成功',
+          message: '修改成功',
+          type: 'success'
+        })
+        this.showPasswordModal = false
+        this.editPassword = {
+          old_password: '',
+          new_password: '',
+          password_confirmation: ''
 
-
-          this.$notify({
-            title: '成功',
-            message: '修改成功',
-            type: 'success'
-          });
-          this.showPasswordModal = false;
-          this.editPassword = {
-            old_password:'',
-            new_password:'',
-            password_confirmation:''
-
-          }
-
+        }
       })
     }
   }
