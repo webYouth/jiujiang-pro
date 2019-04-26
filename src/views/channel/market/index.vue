@@ -46,16 +46,28 @@
             {{ scope.row.name }}
           </template>
         </el-table-column>
-        <el-table-column show-overflow-tooltip fixed="left" label="描述说明" width="150">
+        <el-table-column  label="描述说明" width="150">
           <template slot-scope="scope">
             <p style="white-space: normal;text-wrap: wrap;">{{ scope.row.description }}</p>
           </template>
         </el-table-column>
-        <el-table-column show-overflow-tooltip fixed="left" label="Logo" width="150" align="center">
+        <el-table-column   label="Logo" width="150" align="center">
           <template slot-scope="scope">
             <img :src="scope.row.logo" width="80px" height="80px">
           </template>
         </el-table-column>
+        <el-table-column label="二维码" align="center" width="210">
+          <template slot-scope="scope">
+            <!--<qrcode-->
+            <!--:value="`http://www.qingbiandai.com/api/redirect?id=${scope.row.id}`"-->
+            <!--:options="{ size: 100 }"-->
+            <!--tag="img"-->
+            <!--style="margin: 10px 59px;">-->
+            <!--</qrcode>-->
+            <vue-qr :dotScale="1" :logoSrc="scope.row.logo" :text="`http://www.qingbiandai.com/api/redirect?id=${scope.row.id}`" :margin="10" :logoScale="50" :size="200"></vue-qr>
+          </template>
+        </el-table-column>
+
         <el-table-column label="额度">
           <template slot-scope="scope">
             {{ scope.row.amount }}
@@ -106,16 +118,7 @@
             {{ scope.row.sort }}
           </template>
         </el-table-column>
-        <el-table-column label="二维码" align="center" width="400">
-          <template slot-scope="scope">
-            <qrcode
-              :value="`http://www.qingbiandai.com/api/redirect?id=${scope.row.qrCodeId}`"
-              :options="{ size: 100 }"
-              tag="img"
-              style="margin: 10px 59px;">
-            </qrcode>
-          </template>
-        </el-table-column>
+
         <el-table-column fixed="right" label="操作" width="200">
           <template slot-scope="scope">
             <el-button
@@ -248,12 +251,13 @@
 </template>
 <script type="text/javascript">
 import { getMarketList, changeMarketInfo, addMarketInfo, getQiniuToken } from '@/api/market'
-import Qrcode from '@chenfengyuan/vue-qrcode'
 
+import VueQr from 'vue-qr'
 export default {
   name: 'MarketView',
   components: {
-    Qrcode
+
+    VueQr
   },
   filters: {
     statusFilter(status) {
