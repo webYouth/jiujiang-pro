@@ -80,16 +80,15 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="二维码" align="center" width="400">
-          <template slot-scope="scope">
-            <qrcode
-              :value="`http://www.qingbiandai.com/api/redirect?id=${scope.row.qrCodeId}`"
-              :options="{ size: 100 }"
-              tag="img"
-              style="margin: 10px 59px;">
-            </qrcode>
-          </template>
-        </el-table-column>
+        <!--<el-table-column label="二维码" align="center" width="180">-->
+          <!--<template slot-scope="scope">-->
+            <!--<qrcode-vue-->
+              <!--:size="150"-->
+              <!--:value="`http://www.qingbiandai.com/api/redirect?id=${scope.row.id}`"-->
+              <!--:logo="scope.row.logo"-->
+            <!--&gt;</qrcode-vue>-->
+          <!--</template>-->
+        <!--</el-table-column>-->
 
         <el-table-column v-if="isStaff || isSuper" width="200" label="操作">
           <template slot-scope="scope">
@@ -115,11 +114,11 @@
 <script type="text/javascript">
 import { analysis } from '@/api/market'
 import Clipboard from 'clipboard'
-import Qrcode from '@chenfengyuan/vue-qrcode'
+// import qrcodeVue from 'qrcode-vue'
 export default {
   name: 'MarketView',
   components: {
-    Qrcode
+    // qrcodeVue
   },
   filters: {
     statusFilter(status) {
@@ -221,10 +220,8 @@ export default {
         }
         this.list = response
         this.listLoading = false
-        const _this = this
-        setTimeout(function() {
-          _this.createQrCode()
-        }, 1000)
+
+
       })
 
       // ,
